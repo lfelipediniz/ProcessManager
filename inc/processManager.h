@@ -1,5 +1,5 @@
-#define PROCESSMANAGER_H
 #ifndef PROCESSMANAGER_H
+#define PROCESSMANAGER_H
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -13,6 +13,9 @@ typedef struct time_ {
    int minute;
    int second;
 } TIME;
+
+// create a Time
+TIME* createTime(int hour, int minute, int second);
 
 // add process to queue process to be executed
 bool add_process(int priority, TIME* time, char description[50]);
