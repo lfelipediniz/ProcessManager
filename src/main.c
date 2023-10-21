@@ -19,7 +19,7 @@ int main() {
                description);
 
          // storage time information in the time struct
-         TIME* time = create_time(hour, minute, second);
+         TIME* time = createTime(hour, minute, second);
 
          flag = add_process(priority, time, description);
 
@@ -95,8 +95,8 @@ int main() {
                   &newHour, &newMinute, &newSecond);
 
             // storage time information in the time struct
-            TIME* oldTime = create_time(oldHour, oldMinute, oldSecond);
-            TIME* newTime = create_time(newHour, newMinute, newSecond);
+            TIME* oldTime = createTime(oldHour, oldMinute, oldSecond);
+            TIME* newTime = createTime(newHour, newMinute, newSecond);
 
             flag = changeTime_process(oldTime, newTime);
 
@@ -114,7 +114,7 @@ int main() {
 
          // if the option is -p
          if (strcmp(option, "-p") == 0) {
-            printDescPriority_process(); 
+            printDescPriority_process();
          }
 
          // if the option is -t
