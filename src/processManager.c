@@ -32,46 +32,52 @@ PROCESS* createList_process() {
    return list;
 }
 
+// compare two times
 int compareTime(const TIME* time1, const TIME* time2) {
+   // -1 time1 < time2
+   // 1 time1 > time2
    if (time1->hh < time2->hh) return -1;
    if (time1->hh > time2->hh) return 1;
    if (time1->mm < time2->mm) return -1;
    if (time1->mm > time2->mm) return 1;
    if (time1->ss < time2->ss) return -1;
    if (time1->ss > time2->ss) return 1;
-   return 0;
+   return 0;  // if time1 == time2
 }
 
 void shellSort(SHEET* arr[], int n, char typeCompare) {
-   if (typeCompare == 'p') {
-      // Start with a large gap
-      for (int gap = n / 2; gap > 0; gap /= 2) {
-         for (int i = gap; i < n; i++) {
-            SHEET* temp = arr[i];
-            int j;
+   int gap, i, j;
+
+   // start with a big gap, then reduce the gap
+   for (gap = n / 2; gap > 0; gap /= 2) {
+      for (i = gap; i < n; i++) {
+         SHEET* temp = arr[i];
+
+         // depending on the type of comparison ('p' for priority, 't' for time)
+         // the following block of code will compare and rearrange the elements
+         // accordingly.
+
+         if (typeCompare == 'p') {
+            // Compare based on the 'prior' field for SHEET
             for (j = i; j >= gap && arr[j - gap]->prior > temp->prior;
                  j -= gap) {
                arr[j] = arr[j - gap];
             }
-            arr[j] = temp;
-         }
-      }
-   } else if (typeCompare == 't') {
-      // Start with a large gap
-      for (int gap = n / 2; gap > 0; gap /= 2) {
-         for (int i = gap; i < n; i++) {
-            SHEET* temp = arr[i];
-            int j;
+         } else if (typeCompare == 't') {
+            // Compare based on the 'start' (TIME) field for SHEET using the
+            // compareTime function
             for (j = i;
                  j >= gap && compareTime(arr[j - gap]->start, temp->start) > 0;
                  j -= gap) {
                arr[j] = arr[j - gap];
             }
-            arr[j] = temp;
          }
+
+         arr[j] = temp;
       }
    }
 }
+
 // add a process
 bool add_process(PROCESS* list, int priority, TIME* time, char* description) {
    if (list == NULL || list->size == MAX_PROCESSES) return false;
@@ -86,7 +92,6 @@ bool add_process(PROCESS* list, int priority, TIME* time, char* description) {
 
    shellSort(list->processesOrgPrior, list->size + 1, 'p');
    shellSort(list->processesOrgTime, list->size + 1, 't');
-
 
    list->size++;
 
