@@ -32,88 +32,35 @@ PROCESS* createList_process() {
    return list;
 }
 
-// compare two time structs for the binary search function
-int compareTimes(TIME* time1, TIME* time2) {
-   if (time1->hh != time2->hh)
-      return time1->hh - time2->hh;
-   else if (time1->mm != time2->mm)
-      return time1->mm - time2->mm;
-   else
-      return time1->ss - time2->ss;
+void shellSort(SHEET* arr[], int n) {
+    // Start with a large gap
+    for (int gap = n / 2; gap > 0; gap /= 2) {
+        for (int i = gap; i < n; i++) {
+            SHEET* temp = arr[i];
+            int j;
+            for (j = i; j >= gap && arr[j - gap]->prior > temp->prior; j -= gap) {
+                arr[j] = arr[j - gap];
+            }
+            arr[j] = temp;
+        }
+    }
 }
-
-int binarySearchProcess(PROCESS* list, char criteria, SHEET* sheet) {
-   int left = 0;
-   int right = list->size - 1;
-   int insertIndex = -1;
-
-   while (left <= right) {
-      int mid = (left + right) / 2;
-      int compare;
-
-      if (criteria == 'p')
-         // compare by priority (from high to low)
-         compare = list->processesOrgPrior[mid]->prior - sheet->prior;
-      else if (criteria == 't')
-         // compare by time (from low to high)
-         compare =
-             compareTimes(sheet->start, list->processesOrgTime[mid]->start);
-      else
-         // invalid criteria
-         return -1;
-
-      if (compare < 0) {
-         // sheet should be inserted before mid
-         right = mid - 1;
-         insertIndex = mid;
-      } else if (compare > 0) {
-         // sheet should be inserted after mid
-         left = mid + 1;
-      } else {
-         // if there is a tie in the comparison, insert after mid
-         left = mid + 1;
-         insertIndex = mid + 1;
-      }
-   }
-
-   if (insertIndex == -1) {
-      // the list is empty, or the sheet should be inserted at the beginning
-      insertIndex = 0;
-   }
-
-   return insertIndex;
-}
-
-// add a process to the list based on the specified criteria
+// add a process
 bool add_process(PROCESS* list, int priority, TIME* time, char* description) {
-   // list is full
-   if (list->size >= MAX_PROCESSES) return false;
+   if (list == NULL || list->size == MAX_PROCESSES) return false;
 
    SHEET* sheet = (SHEET*)malloc(sizeof(SHEET));
    sheet->prior = priority;
    sheet->start = time;
    strcpy(sheet->description, description);
 
-   int insertIndex;
-   int i;
+   list->processesOrgPrior[list->size] = sheet;
+   list->processesOrgTime[list->size] = sheet;
 
-   insertIndex = binarySearchProcess(list, 'p', sheet);
-
-   // shift elements to make space for the new element
-   for (i = list->size; i > insertIndex; i--)
-      list->processesOrgPrior[i] = list->processesOrgPrior[i - 1];
-
-   list->processesOrgPrior[insertIndex] = sheet;
-
-   insertIndex = binarySearchProcess(list, 't', sheet);
-   // shift elements to make space for the new element
-
-   for (i = list->size; i > insertIndex; i--)
-      list->processesOrgTime[i] = list->processesOrgTime[i - 1];
-
-   list->processesOrgTime[insertIndex] = sheet;
+   shellSort(list->processesOrgPrior, list->size + 1);
 
    list->size++;
+
    return true;
 }
 

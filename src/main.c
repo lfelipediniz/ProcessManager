@@ -4,12 +4,13 @@ int main() {
    char operation[15];
    char option[2];
    bool flag;
+   bool notQuit = true;
 
    // create a process list
    PROCESS* list = createList_process();
 
    // get the operation from the user and store it in the variable operation
-   while (strcmp(operation, "quit") != 0) {
+   while (notQuit) {
       scanf("%s", operation);
 
       // if the operation is add
@@ -108,28 +109,29 @@ int main() {
                printf("Time not changed :(\n");
             }
          }
-      }
+      } // if operation is print
+         else if (strcmp(operation, "print") == 0) {
+            // capturing the option flag
+            scanf("%s", option);
 
-      // if operation is print
-      else if (strcmp(operation, "print") == 0) {
-         // capturing the option flag
-         scanf("%s", option);
+            // if the option is -p
+            if (strcmp(option, "-p") == 0) {
+               printDescPriority_process(list);
+            }
 
-         // if the option is -p
-         if (strcmp(option, "-p") == 0) {
-            printDescPriority_process(list);
+            // if the option is -t
+            else if (strcmp(option, "-t") == 0) {
+               printAscTime_process(list);
+            }
+
+            // otherwise, invalid option
+            else {
+               printf("Invalid option\n");
+            }
          }
-
-         // if the option is -t
-         else if (strcmp(option, "-t") == 0) {
-            printAscTime_process(list);
+         else if (strcmp(operation, "quit") == 0) {
+            notQuit = false;
          }
-
-         // otherwise, invalid option
-         else {
-            printf("Invalid option\n");
-         }
-      }
    }
 
    freeProcessList(list);
