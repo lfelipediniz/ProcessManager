@@ -12,9 +12,11 @@ int main() {
    // get the operation from the user and store it in the variable operation
    while (notQuit) {
       scanf("%s", operation);
-
+      if (strcmp(operation, "quit") == 0) {
+         notQuit = false;
+      }
       // if the operation is add
-      if (strcmp(operation, "add") == 0) {
+      else if (strcmp(operation, "add") == 0) {
          int priority, hour, minute, second;
          char description[50];
 
@@ -109,29 +111,26 @@ int main() {
                printf("Time not changed :(\n");
             }
          }
-      } // if operation is print
-         else if (strcmp(operation, "print") == 0) {
-            // capturing the option flag
-            scanf("%s", option);
+      }  // if operation is print
+      else if (strcmp(operation, "print") == 0) {
+         // capturing the option flag
+         scanf("%s", option);
 
-            // if the option is -p
-            if (strcmp(option, "-p") == 0) {
-               printDescPriority_process(list);
-            }
-
-            // if the option is -t
-            else if (strcmp(option, "-t") == 0) {
-               printAscTime_process(list);
-            }
-
-            // otherwise, invalid option
-            else {
-               printf("Invalid option\n");
-            }
+         // if the option is -p
+         if (strcmp(option, "-p") == 0) {
+            printDescPriority_process(list);
          }
-         else if (strcmp(operation, "quit") == 0) {
-            notQuit = false;
+
+         // if the option is -t
+         else if (strcmp(option, "-t") == 0) {
+            printAscTime_process(list);
          }
+
+         // otherwise, invalid option
+         else {
+            printf("Invalid option\n");
+         }
+      }
    }
 
    freeProcessList(list);

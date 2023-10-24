@@ -54,17 +54,15 @@ void shellSort(SHEET* arr[], int n, char typeCompare) {
          SHEET* temp = arr[i];
 
          // depending on the type of comparison ('p' for priority, 't' for time)
-         // the following block of code will compare and rearrange the elements
-         // accordingly.
 
          if (typeCompare == 'p') {
-            // Compare based on the 'prior' field for SHEET
+            // compare based on the 'prior' field for SHEET
             for (j = i; j >= gap && arr[j - gap]->prior > temp->prior;
                  j -= gap) {
                arr[j] = arr[j - gap];
             }
          } else if (typeCompare == 't') {
-            // Compare based on the 'start' (TIME) field for SHEET using the
+            // compare based on the 'start' (TIME) field for SHEET using the
             // compareTime function
             for (j = i;
                  j >= gap && compareTime(arr[j - gap]->start, temp->start) > 0;
