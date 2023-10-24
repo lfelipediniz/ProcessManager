@@ -1,68 +1,48 @@
 
 #include "../inc/processManager.h"
 
+// storage a information of a process
+typedef struct sheet_ {
+   int prior;
+   TIME* start;
+   char description[MAX_DESCR];
+} SHEET;
 
-typedef struct node_ {
-   int priority;
-   TIME* time;
-   char description[50];
-   struct node_* next;
-} NODE;
-
+// storage processes sheets
 typedef struct process_ {
-   NODE* head;
+   SHEET* processes[MAX_PROCESSES];
    int size;
 } PROCESS;
 
 // create a time function that returns a pointer to a TIME struct
 TIME* createTime(int hour, int minute, int second) {
    TIME* time = (TIME*)malloc(sizeof(TIME));
-   time->hour = hour;
-   time->minute = minute;
-   time->second = second;
+   time->hh = hour;
+   time->mm = minute;
+   time->ss = second;
    return time;
 }
 
 // create a process function that returns a pointer to a PROCESS struct
 PROCESS* createProcess() {
-   PROCESS* process = (PROCESS*)malloc(sizeof(PROCESS));
-   process->head = NULL;
-   process->size = 0;
-   return process;
+   PROCESS* list = (PROCESS*)malloc(sizeof(PROCESS));
+   list->size = 0;
+   return list;
 }
 
 // add process to queue process to be executed
-bool add_process(PROCESS * list, int priority, TIME* time, char description[50]){
-   NODE* node = (NODE*)malloc(sizeof(NODE));
-   node->priority = priority;
-   node->time = time;
-   strcpy(node->description, description);
-   node->next = NULL;
-
-   if (list->head == NULL) {
-      list->head = node;
+bool add_process(PROCESS * list, int priority, TIME* time, char* description){
+   if (list->size < MAX_PROCESSES) {
+      SHEET* sheet = (SHEET*)malloc(sizeof(SHEET));
+      sheet->prior = priority;
+      sheet->start = time;
+      strcpy(sheet->description, description);
+      list->processes[list->size] = sheet;
       list->size++;
       return true;
    }
+   return false;
 
-   NODE* aux = list->head;
-   NODE* prev = NULL;
-
-   while (aux != NULL && aux->priority > priority) {
-      prev = aux;
-      aux = aux->next;
-   }
-
-   if (prev == NULL) {
-      node->next = list->head;
-      list->head = node;
-   } else {
-      prev->next = node;
-      node->next = aux;
-   }
-
-   list->size++;
-   return true;
 }
 
 // execute a process with highest priority

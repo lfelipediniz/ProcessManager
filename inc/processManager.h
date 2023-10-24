@@ -6,13 +6,15 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define MAX_PROCESSES 300
+#define MAX_DESCR 50
+
 typedef struct process_ PROCESS;
-typedef struct node_ NODE;
 
 typedef struct time_ {
-   int hour;
-   int minute;
-   int second;
+   int hh;
+   int mm;
+   int ss;
 } TIME;
 
 // create a Time
@@ -22,7 +24,7 @@ TIME* createTime(int hour, int minute, int second);
 PROCESS* createProcessList();
 
 // add process to queue process to be executed
-bool add_process(PROCESS * list, int priority, TIME* time, char description[50]);
+bool add_process(PROCESS * list, int priority, TIME* time, char* description);
 
 // execute a process with highest priority
 void executeHighPriority_process(PROCESS * list);
@@ -47,5 +49,8 @@ void printDescPriority_process(PROCESS * list);
 
 // print all processes in ascending order of time
 void printAscTime_process(PROCESS * list);
+
+// free the process list
+bool freeProcessList(PROCESS * list);
 
 #endif
