@@ -5,6 +5,9 @@ int main() {
    char option[2];
    bool flag;
 
+   // create a process list
+   PROCESS* list = createList_process();
+
    // get the operation from the user and store it in the variable operation
    while (strcmp(operation, "quit") != 0) {
       scanf("%s", operation);
@@ -21,7 +24,7 @@ int main() {
          // storage time information in the time struct
          TIME* time = createTime(hour, minute, second);
 
-         flag = add_process(priority, time, description);
+         flag = add_process(list, priority, time, description);
 
          // verify if the process was added
          if (!flag) {
@@ -36,12 +39,12 @@ int main() {
 
          // if the option is -p, call the execute highest priority function
          if (strcmp(option, "-p") == 0) {
-            executeHighPriority_process();
+            executeHighPriority_process(list);
          }
 
          // if the option is -t, call the execute execute low time function
          else if (strcmp(option, "-t") == 0) {
-            executeLowTime_process();
+            executeLowTime_process(list);
          }
 
          // otherwise, invalid option
@@ -57,11 +60,11 @@ int main() {
 
          // if the option is -p, call the next highest priority function
          if (strcmp(option, "-p") == 0) {
-            infoHighPriority_process();
+            infoHighPriority_process(list);
          }
          // if the option is -t, call the next low time function
          else if (strcmp(option, "-t") == 0) {
-            infoLowTime_process();
+            infoLowTime_process(list);
          }
 
          // otherwise, invalid option
@@ -80,7 +83,7 @@ int main() {
             int oldPriority, newPriority;
             scanf("%d|%d", &oldPriority, &newPriority);
 
-            flag = changePriority_process(oldPriority, newPriority);
+            flag = changePriority_process(list, oldPriority, newPriority);
 
             // verify if the priority was changed
             if (!flag) {
@@ -98,7 +101,7 @@ int main() {
             TIME* oldTime = createTime(oldHour, oldMinute, oldSecond);
             TIME* newTime = createTime(newHour, newMinute, newSecond);
 
-            flag = changeTime_process(oldTime, newTime);
+            flag = changeTime_process(list, oldTime, newTime);
 
             // verify if the time was changed
             if (!flag) {
@@ -114,12 +117,12 @@ int main() {
 
          // if the option is -p
          if (strcmp(option, "-p") == 0) {
-            printDescPriority_process();
+            printDescPriority_process(list);
          }
 
          // if the option is -t
          else if (strcmp(option, "-t") == 0) {
-            printAscTime_process();
+            printAscTime_process(list);
          }
 
          // otherwise, invalid option
@@ -128,6 +131,8 @@ int main() {
          }
       }
    }
+
+   freeProcessList(list);
 
    return 0;
 }

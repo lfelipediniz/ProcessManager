@@ -26,10 +26,20 @@ TIME* createTime(int hour, int minute, int second) {
 }
 
 // create a process function that returns a pointer to a PROCESS struct
-PROCESS* createProcess() {
+PROCESS* createList_process() {
    PROCESS* list = (PROCESS*)malloc(sizeof(PROCESS));
    list->size = 0;
    return list;
+}
+
+// compare two time structs for the binary search function
+int compareTimes(TIME* time1, TIME* time2) {
+   if (time1->hh != time2->hh)
+      return time1->hh - time2->hh;
+   else if (time1->mm != time2->mm)
+      return time1->mm - time2->mm;
+   else
+      return time1->ss - time2->ss;
 }
 
 int binarySearchProcess(PROCESS* list, char criteria, SHEET* sheet) {
@@ -74,19 +84,8 @@ int binarySearchProcess(PROCESS* list, char criteria, SHEET* sheet) {
    return insertIndex;
 }
 
-// compare two time structs for the binary search function
-int compareTimes(TIME* time1, TIME* time2) {
-   if (time1->hh != time2->hh)
-      return time1->hh - time2->hh;
-   else if (time1->mm != time2->mm)
-      return time1->mm - time2->mm;
-   else
-      return time1->ss - time2->ss;
-}
-
 // add a process to the list based on the specified criteria
-bool addProcess(PROCESS* list, int priority, TIME* time, char* description,
-                char criteria) {
+bool add_process(PROCESS* list, int priority, TIME* time, char* description) {
    // list is full
    if (list->size >= MAX_PROCESSES) return false;
 
@@ -98,26 +97,21 @@ bool addProcess(PROCESS* list, int priority, TIME* time, char* description,
    int insertIndex;
    int i;
 
-   if (criteria == 'p') {
-      insertIndex = binarySearchProcess(list, 'p', sheet);
+   insertIndex = binarySearchProcess(list, 'p', sheet);
 
-      // shift elements to make space for the new element
-      for (i = list->size; i > insertIndex; i--)
-         list->processesOrgPrior[i] = list->processesOrgPrior[i - 1];
+   // shift elements to make space for the new element
+   for (i = list->size; i > insertIndex; i--)
+      list->processesOrgPrior[i] = list->processesOrgPrior[i - 1];
 
-      list->processesOrgPrior[insertIndex] = sheet;
+   list->processesOrgPrior[insertIndex] = sheet;
 
-   } else if (criteria == 't') {
-      insertIndex = binarySearchProcess(list, 't', sheet);
-      // shift elements to make space for the new element
+   insertIndex = binarySearchProcess(list, 't', sheet);
+   // shift elements to make space for the new element
 
-      for (i = list->size; i > insertIndex; i--)
-         list->processesOrgTime[i] = list->processesOrgTime[i - 1];
+   for (i = list->size; i > insertIndex; i--)
+      list->processesOrgTime[i] = list->processesOrgTime[i - 1];
 
-      list->processesOrgTime[insertIndex] = sheet;
-
-   } else
-      return false;  // invalid criteria
+   list->processesOrgTime[insertIndex] = sheet;
 
    list->size++;
    return true;
@@ -136,16 +130,46 @@ void infoHighPriority_process(PROCESS* list) {}
 void infoLowTime_process(PROCESS* list) {}
 
 // change the priority of a process
-bool changePriority_process(PROCESS* list, int oldPriority, int newPriority) {}
+bool changePriority_process(PROCESS* list, int oldPriority, int newPriority) {
+   return true;
+}
 
 // change the time of a process
-bool changeTime_process(PROCESS* list, TIME* oldTime, TIME* newTime) {}
+bool changeTime_process(PROCESS* list, TIME* oldTime, TIME* newTime) {
+   return true;
+}
 
 // print all processes in descending order of priority
-void printDescPriority_process(PROCESS* list) {}
+void printDescPriority_process(PROCESS* list) {
+   if (list == NULL || list->size == 0) {
+      printf("No processes to print.\n");
+      return;
+   }
+
+   printf("Processes in descending order of priority:\n");
+   for (int i = list->size - 1; i >= 0; i--) {
+      SHEET* sheet = list->processesOrgPrior[i];
+      printf("Priority: %d, Time: %02d:%02d:%02d, Description: %s\n",
+             sheet->prior, sheet->start->hh, sheet->start->mm, sheet->start->ss,
+             sheet->description);
+   }
+}
 
 // print all processes in ascending order of time
-void printAscTime_process(PROCESS* list) {}
+void printAscTime_process(PROCESS* list) {
+   if (list == NULL || list->size == 0) {
+      printf("No processes to print.\n");
+      return;
+   }
+
+   printf("Processes in ascending order of time:\n");
+   for (int i = 0; i < list->size; i++) {
+      SHEET* sheet = list->processesOrgTime[i];
+      printf("Priority: %d, Time: %02d:%02d:%02d, Description: %s\n",
+             sheet->prior, sheet->start->hh, sheet->start->mm, sheet->start->ss,
+             sheet->description);
+   }
+}
 
 // free the process list
 bool freeProcessList(PROCESS* list) {
