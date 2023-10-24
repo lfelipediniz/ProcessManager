@@ -1,11 +1,17 @@
 
 #include "../inc/processManager.h"
 
-typedef struct process_ {
+
+typedef struct node_ {
    int priority;
    TIME* time;
    char description[50];
-   struct process_* next;
+   struct node_* next;
+} NODE;
+
+typedef struct process_ {
+   NODE* head;
+   int size;
 } PROCESS;
 
 // create a time function that returns a pointer to a TIME struct
@@ -17,11 +23,52 @@ TIME* createTime(int hour, int minute, int second) {
    return time;
 }
 
+// create a process function that returns a pointer to a PROCESS struct
+PROCESS* createProcess() {
+   PROCESS* process = (PROCESS*)malloc(sizeof(PROCESS));
+   process->head = NULL;
+   process->size = 0;
+   return process;
+}
+
 // add process to queue process to be executed
-bool add_process(int priority, TIME* time, char description[50]) {}
+bool add_process(PROCESS * list, int priority, TIME* time, char description[50]){
+   NODE* node = (NODE*)malloc(sizeof(NODE));
+   node->priority = priority;
+   node->time = time;
+   strcpy(node->description, description);
+   node->next = NULL;
+
+   if (list->head == NULL) {
+      list->head = node;
+      list->size++;
+      return true;
+   }
+
+   NODE* aux = list->head;
+   NODE* prev = NULL;
+
+   while (aux != NULL && aux->priority > priority) {
+      prev = aux;
+      aux = aux->next;
+   }
+
+   if (prev == NULL) {
+      node->next = list->head;
+      list->head = node;
+   } else {
+      prev->next = node;
+      node->next = aux;
+   }
+
+   list->size++;
+   return true;
+}
 
 // execute a process with highest priority
-void executeHighPriority_process() {}
+void executeHighPriority_process() {
+   
+}
 
 // execute a process with lowest time
 void executeLowTime_process() {}

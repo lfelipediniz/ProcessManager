@@ -7,6 +7,7 @@
 #include <string.h>
 
 typedef struct process_ PROCESS;
+typedef struct node_ NODE;
 
 typedef struct time_ {
    int hour;
@@ -17,8 +18,11 @@ typedef struct time_ {
 // create a Time
 TIME* createTime(int hour, int minute, int second);
 
+//create a Process
+PROCESS* createProcessList();
+
 // add process to queue process to be executed
-bool add_process(int priority, TIME* time, char description[50]);
+bool add_process(PROCESS * list, int priority, TIME* time, char description[50]);
 
 // execute a process with highest priority
 void executeHighPriority_process();
