@@ -79,7 +79,7 @@ void infoHighPriority_process(PROCESS * list) {
 }
 
 // shows all information about the lowest time process
-void infoLowTime_process() {PROCESS * list}
+void infoLowTime_process(PROCESS * list) {}
 
 // change the priority of a process
 bool changePriority_process(PROCESS * list, int oldPriority, int newPriority) {}
@@ -91,4 +91,4 @@ bool changeTime_process(PROCESS * list, TIME* oldTime, TIME* newTime) {}
 void printDescPriority_process(PROCESS * list) {}
 
 // print all processes in ascending order of time
-void printAscTime_process() {PROCESS * list}
+void printAscTime_process(PROCESS * list) {}
