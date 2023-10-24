@@ -149,13 +149,16 @@ void printAscTime_process(PROCESS* list) {}
 
 // free the process list
 bool freeProcessList(PROCESS* list) {
+   if (!list) return false;
+
    int i;
-   if (list) {
-      for (i = 0; i < list->size; i++) {
-         free(list->processes[i]);
-      }
-      free(list);
-      return true;
+   for (i = 0; i < list->size; i++) {
+      free(list->processesOrgPrior[i]->start);
+      free(list->processesOrgPrior[i]);
+      free(list->processesOrgTime[i]->start);
+      free(list->processesOrgTime[i]);
    }
-   return false;
+
+   free(list);
+   return true;
 }
