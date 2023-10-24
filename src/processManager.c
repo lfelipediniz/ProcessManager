@@ -125,10 +125,10 @@ void printDescPriority_process(PROCESS* list) {
       return;
    }
 
-   printf("Processes in descending order of priority:\n");
+   int i;
    for (int i = list->size - 1; i >= 0; i--) {
       SHEET* sheet = list->processesOrgPrior[i];
-      printf("Priority: %d, Time: %02d:%02d:%02d, Description: %s\n",
+      printf("%d %02d:%02d:%02d %s\n",
              sheet->prior, sheet->start->hh, sheet->start->mm, sheet->start->ss,
              sheet->description);
    }
@@ -141,10 +141,10 @@ void printAscTime_process(PROCESS* list) {
       return;
    }
 
-   printf("Processes in ascending order of time:\n");
-   for (int i = 0; i < list->size; i++) {
+   int i;
+   for (i = 0; i < list->size; i++) {
       SHEET* sheet = list->processesOrgTime[i];
-      printf("Priority: %d, Time: %02d:%02d:%02d, Description: %s\n",
+      printf("%d %02d:%02d:%02d %s\n",
              sheet->prior, sheet->start->hh, sheet->start->mm, sheet->start->ss,
              sheet->description);
    }
