@@ -51,6 +51,6 @@ void printDescPriority_process(PROCESS* list);
 void printAscTime_process(PROCESS* list);
 
 // free the process list
-bool freeProcessList(PROCESS* list);
+bool freeProcessList(PROCESS** list);
 
 #endif
