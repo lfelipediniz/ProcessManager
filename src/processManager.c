@@ -12,7 +12,6 @@ typedef struct sheet_ {
 typedef struct process_ {
    SHEET* processesOrgPrior[MAX_PROCESSES];
    SHEET* processesOrgTime[MAX_PROCESSES];
-
    int size;
 } PROCESS;
 
@@ -110,12 +109,76 @@ void infoLowTime_process(PROCESS* list) {}
 
 // change the priority of a process
 bool changePriority_process(PROCESS* list, int oldPriority, int newPriority) {
-   return true;
+   int start, middle, final;
+
+   start = 0;
+   final = list->size - 1;
+   middle = (start + final)/2;
+
+   while((start < final) && (list->processesOrgPrior[middle]->prior != oldPriority)) {
+      if(list->processesOrgPrior[middle]->prior < oldPriority)
+         start = middle + 1;
+      else
+         final = middle - 1;
+      middle = (start + final)/2;
+   }
+
+   if((start <= final) && (list->processesOrgPrior[middle]->prior == oldPriority)) {
+      list->processesOrgPrior[middle]->prior = newPriority;
+      shellSort(list->processesOrgPrior, list->size, 'p');
+      return true;
+   }
+
+   return false;
 }
 
 // change the time of a process
 bool changeTime_process(PROCESS* list, TIME* oldTime, TIME* newTime) {
-   return true;
+   int start, middle, final;
+
+   start = 0;
+   final = list->size-1;
+   middle = (start + final)/2;
+
+   while((start < final) && (list->processesOrgTime[middle]->start->hh != oldTime->hh)) {
+      if(list->processesOrgTime[middle]->start->hh < oldTime->hh)
+         start = middle + 1;
+      else
+         final = middle-1;
+      middle = (start + final)/2;
+   }
+
+   if((start <= final) && (list->processesOrgTime[middle]->start->hh == oldTime->hh)) {
+      while((start < final) && (list->processesOrgTime[middle]->start->mm != oldTime->mm)) {
+         if(list->processesOrgTime[middle]->start->mm < oldTime->mm)
+            start = middle + 1;
+         else
+            final = middle-1;
+         middle = (start + final)/2;
+      }
+         
+      if((start <= final) && (list->processesOrgTime[middle]->start->mm == oldTime->mm)) {
+         while((start < final) && (list->processesOrgTime[middle]->start->ss != oldTime->ss)) {
+            if(list->processesOrgTime[middle]->start->ss < oldTime->ss)
+               start = middle + 1;
+            else
+               final = middle-1;
+            middle = (start + final)/2;
+         }
+
+         if((start <= final) && (list->processesOrgTime[middle]->start->ss == oldTime->ss)) {
+            list->processesOrgTime[middle]->start->hh = newTime->hh;
+            list->processesOrgTime[middle]->start->mm = newTime->mm;
+            list->processesOrgTime[middle]->start->ss = newTime->ss;
+
+            shellSort(list->processesOrgTime, list->size, 't');
+
+            return true;
+         }
+      }
+   }
+
+   return false;
 }
 
 // print all processes in descending order of priority
@@ -151,17 +214,18 @@ void printAscTime_process(PROCESS* list) {
 }
 
 // free the process list
-bool freeProcessList(PROCESS* list) {
-   if (!list) return false;
+bool freeProcessList(PROCESS** list) {
+   if (*list == NULL) 
+      return false;
 
    int i;
-   for (i = 0; i < list->size; i++) {
-      free(list->processesOrgPrior[i]->start);
-      free(list->processesOrgPrior[i]);
-      free(list->processesOrgTime[i]->start);
-      free(list->processesOrgTime[i]);
+   for (i = 0; i < (*list)->size; i++) {
+      free((*list)->processesOrgPrior[i]->start);
+      free((*list)->processesOrgPrior[i]);
+      free((*list)->processesOrgTime[i]->start);
+      free((*list)->processesOrgTime[i]);
    }
 
-   free(list);
+   free(*list);
    return true;
 }
