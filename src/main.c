@@ -14,6 +14,7 @@ int main() {
       scanf("%s", operation);
       if (strcmp(operation, "quit") == 0) {
          notQuit = false;
+         break;
       }
       // if the operation is add
       else if (strcmp(operation, "add") == 0) {
@@ -133,7 +134,7 @@ int main() {
       }
    }
 
-   freeProcessList(list);
+   freeProcessList(&list);
 
    return 0;
 }
