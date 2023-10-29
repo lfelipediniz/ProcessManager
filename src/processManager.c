@@ -218,14 +218,12 @@ bool freeProcessList(PROCESS** list) {
    if (*list == NULL) 
       return false;
 
-   int i;
-   for (i = 0; i < (*list)->size; i++) {
+   for (int i = 0; i < (*list)->size; i++) {
       free((*list)->processesOrgPrior[i]->start);
       free((*list)->processesOrgPrior[i]);
-      free((*list)->processesOrgTime[i]->start);
-      free((*list)->processesOrgTime[i]);
    }
 
    free(*list);
    return true;
 }
+
