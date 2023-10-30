@@ -99,7 +99,33 @@ bool add_process(PROCESS* list, int priority, TIME* time, char* description) {
 void executeHighPriority_process(PROCESS* list) {}
 
 // execute a process with lowest time
-void executeLowTime_process(PROCESS* list) {}
+void executeLowTime_process(PROCESS* list) {
+   if (list == NULL || list->size == 0) {
+      printf("No processes to execute.\n");
+      return;
+   }
+
+   TIME* t = ((list->processesOrgTime)[0])->start;
+   (list->processesOrgTime)[0] = NULL;
+
+   int i = 0;
+   for(; i < list->size; ++i) {
+      if(compareTime(t, ((list->processesOrgPrior)[i])->start) == 0) {
+         (list->processesOrgPrior)[i] = NULL;
+         break;
+      }
+   }
+
+   for(; i < list->size - 1; ++i) {
+      (list->processesOrgPrior)[i] = (list->processesOrgPrior)[i+1];
+   }
+
+   for(int i = 0; i < list->size - 1; ++i) {
+      (list->processesOrgTime)[i] = (list->processesOrgTime)[i+1];
+   }
+
+   list->size--;
+}
 
 // shows all information about the highest priority process
 void infoHighPriority_process(PROCESS* list) {}
