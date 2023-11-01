@@ -150,7 +150,24 @@ void executeLowTime_process(PROCESS* list) {
 }
 
 // shows all information about the highest priority process
-void infoHighPriority_process(PROCESS* list) {}
+void infoHighPriority_process(PROCESS* list) {
+   if (list == NULL || list->size == 0) {
+      printf("No processes to execute.\n");
+      return;
+   }
+
+   int priot = ((list->processesOrgPrior)[list->size - 1])->prior;
+
+   int i = 0;
+   for(; i < list->size; ++i) {
+      if(priot == ((list->processesOrgTime)[i])->prior) {
+         printf("%d %02d:%02d:%02d %s\n",
+               ((list->processesOrgTime)[i])->prior, ((list->processesOrgTime)[i])->start->hh, ((list->processesOrgTime)[i])->start->mm, ((list->processesOrgTime)[i])->start->ss,
+               ((list->processesOrgTime)[i])->description);
+         break;
+      }
+   }
+}
 
 // shows all information about the lowest time process
 void infoLowTime_process(PROCESS* list) {}
