@@ -1,24 +1,11 @@
 #ifndef PROCESSMANAGER_H
 #define PROCESSMANAGER_H
 
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#define MAX_PROCESSES 300
+#include "time.h"
+#define MAX_PROCESSES 100
 #define MAX_DESCR 50
 
 typedef struct process_ PROCESS;
-
-typedef struct time_ {
-   int hh;
-   int mm;
-   int ss;
-} TIME;
-
-// create a Time
-TIME* createTime(int hour, int minute, int second);
 
 // create a Process
 PROCESS* createList_process();
