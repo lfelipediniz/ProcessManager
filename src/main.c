@@ -3,19 +3,20 @@
 int main() {
    char operation[15];
    char option[2];
-   bool flag;
-   bool notQuit = true;
+   bool flag, newLine;
 
    // create a process list
    PROCESS* list = createList_process();
 
+   scanf("%s", operation);
+
    // get the operation from the user and store it in the variable operation
-   while (notQuit) {
-      scanf("%s", operation);
-      if (strcmp(operation, "quit") == 0) {
-         notQuit = false;
-         break;
-      }
+   while (1) {
+      newLine = false;
+
+      if (strcmp(operation, "quit") == 0)
+         break;         
+
       // if the operation is add
       else if (strcmp(operation, "add") == 0) {
          int priority, hour, minute, second;
@@ -31,9 +32,8 @@ int main() {
          flag = add_process(list, priority, time, description);
 
          // verify if the process was added
-         if (!flag) {
+         if (!flag)
             printf("Process not added :(\n");
-         }
       }
 
       // if the operation is exec
@@ -52,13 +52,13 @@ int main() {
          }
 
          // otherwise, invalid option
-         else {
+         else
             printf("Invalid option\n");
-         }
       }
 
       // if operation is next
       else if (strcmp(operation, "next") == 0) {
+         newLine = true;
          // capturing the option flag
          scanf("%s", option);
 
@@ -72,9 +72,8 @@ int main() {
          }
 
          // otherwise, invalid option
-         else {
+         else
             printf("Invalid option\n");
-         }
       }
 
       // if operation is change
@@ -90,9 +89,8 @@ int main() {
             flag = changePriority_process(list, oldPriority, newPriority);
 
             // verify if the priority was changed
-            if (!flag) {
+            if (!flag)
                printf("Priority not changed :(\n");
-            }
          }
 
          // if the option is -t
@@ -108,12 +106,14 @@ int main() {
             flag = changeTime_process(list, oldTime, newTime);
 
             // verify if the time was changed
-            if (!flag) {
+            if (!flag)
                printf("Time not changed :(\n");
-            }
          }
-      }  // if operation is print
+      }  
+      
+      // if operation is print
       else if (strcmp(operation, "print") == 0) {
+         newLine = true;
          // capturing the option flag
          scanf("%s", option);
 
@@ -128,10 +128,14 @@ int main() {
          }
 
          // otherwise, invalid option
-         else {
+         else
             printf("Invalid option\n");
-         }
       }
+
+      scanf("%s", operation);
+
+      if((strcmp(operation, "quit") != 0) && (newLine == true))
+         printf("\n"); 
    }
 
    freeProcessList(&list);
