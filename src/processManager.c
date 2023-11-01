@@ -170,7 +170,25 @@ void infoHighPriority_process(PROCESS* list) {
 }
 
 // shows all information about the lowest time process
-void infoLowTime_process(PROCESS* list) {}
+void infoLowTime_process(PROCESS* list) {
+      if (list == NULL || list->size == 0) {
+         printf("No processes to execute.\n");
+         return;
+      }
+
+      TIME* t = ((list->processesOrgTime)[0])->start;
+
+      int i = 0;
+      for(; i < list->size; ++i) {
+         if(compareTime(t, ((list->processesOrgPrior)[i])->start) == 0) {
+            printf("%d %02d:%02d:%02d %s\n",
+                  ((list->processesOrgTime)[i])->prior, ((list->processesOrgTime)[i])->start->hh, ((list->processesOrgTime)[i])->start->mm, ((list->processesOrgTime)[i])->start->ss,
+                  ((list->processesOrgTime)[i])->description);
+            break;
+         }
+      }
+   }
+}
 
 // change the priority of a process
 bool changePriority_process(PROCESS* list, int oldPriority, int newPriority) {
